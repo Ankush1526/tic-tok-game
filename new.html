@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tic Tac Toe</title>
+    <style>
+      .body{
+        background-color: rgb(181, 181, 103);
+      }
+      .board {
+        display: flex;
+         flex-wrap: wrap; 
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+        border: 3px solid rgb(240, 235, 235);
+        background-color: rgb(183, 221, 107);
+      }
+
+      .square {
+        width: 95px;
+        height: 95px;
+        font-size: 50px;
+        text-align: center;
+        line-height: 100px;
+        cursor: pointer;
+        border: 1px solid black;
+        border-top: none;
+        border-left: none;
+        /* border-right: none; */
+      }
+
+      .square:hover {
+        background-color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="board">
+      <div class="square " id="0"></div>
+      <div class="square" id="1"></div>
+      <div class="square" id="2"></div>
+      <div class="square" id="3"></div>
+      <div class="square" id="4"></div>
+      <div class="square" id="5"></div>
+      <div class="square" id="6"></div>
+      <div class="square" id="7"></div>
+      <div class="square" id="8"></div>
+    </div>
+
+    <script>
+      const board = document.querySelector(".board");
+      const squares = document.querySelectorAll(".square");
+      let currentPlayer = "O";
+      let gameFinished =false;
+
+      function handleClick(e) {
+        if (gameFinished) return;
+
+        const square = e.target;
+        if (square.textContent !== "") return;
+
+        square.textContent = currentPlayer;
+        checkWinner();
+    
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+      }
+
+
+      function checkWinner() {
+        const rows = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6],
+        ];
+
+        for (let i = 0; i < rows.length; i++) {
+          const [a, b, c] = rows[i];
+          if (
+            squares[a].textContent &&
+            squares[a].textContent === squares[b].textContent &&
+            squares[a].textContent === squares[c].textContent
+          ) {
+            gameFinished = true;
+           
+              alert(`${currentPlayer} wins!`);
+              resetGame();
+          
+            return;
+          }
+        }
+
+        const isBoardFull = [...squares].every((square) => square.textContent);
+        if (isBoardFull) {
+          gameFinished = true;
+          setTimeout(() => {
+            alert("It is a tie!");
+            resetGame();
+          }, 10);
+        }
+      }
+
+      function resetGame() {
+        squares.forEach((square) => (square.textContent = ""));
+        currentPlayer = "O";
+        gameFinished = false;
+      }
+
+      squares.forEach((square) => square.addEventListener("click", handleClick));
+    </script>
+  </body>
+</html>
